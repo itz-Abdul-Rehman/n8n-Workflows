@@ -1,0 +1,2889 @@
+{
+  "name": "LinkedIn Outbound System",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $input.all().length > 0 }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "5bf84533-02bc-4b99-a20d-bad52fe7b9c6",
+      "name": "Found Profiles?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1296,
+        1088
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  // Data is coming from \"Filter Candidates\" now, not Apify\n  const data = item.json; \n\n  return {\n    company: data.company_name,\n    name: \"Check Profile\", // Google doesn't give clean full names\n    title: \"Check Profile\", // Google snippet is messy\n    linkedin_profile: data.url,\n    email: \"\", \n    source: \"Serper (Google Only)\",\n    date_added: new Date().toISOString()\n  };\n});"
+      },
+      "id": "384ecb14-3dc2-47cb-9509-fc5d63e17cf7",
+      "name": "Normalize Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        1088
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "seconds"
+      },
+      "id": "8b26fc69-1a8a-455d-98fe-f9fcd6f8f18e",
+      "name": "Safety Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        1152
+      ],
+      "webhookId": "4712d421-0a4f-44e8-a60d-263d04835612"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2034706272,
+          "mode": "list",
+          "cachedResultName": "DM_List2.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=2034706272"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company Name": "={{ $json.name }}",
+            "LinkedIn Profile URL": "={{ $json.linkedin_profile }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "LinkedIn Profile URL",
+              "displayName": "LinkedIn Profile URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "f037e626-88f2-4636-9829-09ae04162075",
+      "name": "Save to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1744,
+        1088
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Searches the profiles of Company Hirers/Decision Makers and put them in sheets",
+        "height": 320,
+        "width": 2432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        16,
+        992
+      ],
+      "typeVersion": 1,
+      "id": "6b46f7b2-3dc1-4522-9d69-834f4d9fdc3c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const name = ($json['Full Name'] || '').split(' ');\nreturn { json: { ...$json, first_name_only: name[0] || '' } };"
+      },
+      "id": "190a3a66-b8ca-4807-a3a4-0fc71dfef8c7",
+      "name": "Normalize Lead Fields1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        1984
+      ]
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2123132209,
+          "mode": "list",
+          "cachedResultName": "Required_Jobs2.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=2123132209"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "id": "7c6a8244-2ebc-45a3-96f4-44efc37a731e",
+      "name": "Google Sheets Trigger2",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        2176
+      ],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "klQXKdPRngrlke5u",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json['Connection Requested'] }}",
+              "operation": "notEqual",
+              "value2": "TRUE"
+            },
+            {
+              "value1": "={{ $json['DM Sent'] }}",
+              "operation": "notEqual",
+              "value2": "TRUE"
+            },
+            {
+              "value1": "={{ $json['LinkedIn URL'] }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2bdaf2f0-26db-4044-b3f1-73a711881ca1",
+      "name": "Filter Processed Leads",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        2176
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "7ce78b00-ccb2-4159-9d46-561961582ea5",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        208,
+        2176
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json['LinkedIn URL'] }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8cd0ae6b-b820-4b7c-bf6b-1367bc2adbbe",
+      "name": "Check URL Validity",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        432,
+        2112
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const ai = $json.output || '{}';\nlet parsed = { connection_note: '', dm_message: '' };\ntry { parsed = JSON.parse(ai); } catch {}\nreturn { json: { ...$json, generated_connection_note: parsed.connection_note, generated_dm_message: parsed.dm_message } };"
+      },
+      "id": "5af13f0b-c50d-4d59-b37c-1b94678423ea",
+      "name": "Parse AI Output",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        1984
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 8,
+        "unit": "seconds"
+      },
+      "id": "bcf6df10-4c64-4986-a415-5fd8c59c1f1e",
+      "name": "Safety Wait2",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        1984
+      ],
+      "webhookId": "ba475fcd-bdba-402b-91b2-22b353cc4a8d"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.liaufa.com/api/v1/open-api/campaign-instance/762652/assign/?key=937c86a1-3a7a-4484-9da5-878c8f9751bf&secret=e79b9613-e1f8-4583-9cc7-3abe17b4d9e2",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "profile_link",
+              "value": "=https://www.linkedin.com/in/pratyush-jsh/"
+            },
+            {
+              "name": "first_name",
+              "value": "=pratyush"
+            },
+            {
+              "name": "company",
+              "value": "={{ $('Loop Over Items').item.json.companyName }}"
+            },
+            {
+              "name": "custom_message",
+              "value": "={{ $json.generated_connection_note }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "67a6b434-8453-4c10-a948-44a1e0f44b16",
+      "name": "Send to Expandi",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1904,
+        1984
+      ]
+    },
+    {
+      "parameters": {
+        "model": "moonshotai/kimi-k2-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        2512
+      ],
+      "id": "94d68d7e-c339-4f6a-8eaa-408aed0955ac",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "wvBbNtX5UN8lTvGq",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Company Name: {{ $('Check URL Validity').item.json.Company }}\nComapny Description: {{ $json.results[1].content }}",
+        "options": {
+          "systemMessage": "=\nYou are a professional B2B outreach assistant specializing in company-level personalization for cold outreach.\n\nABOUT WHO WE ARE:\nEasyOutsource is a global remote outsourcing and staffing solutions provider. We help businesses scale by connecting them with top-tier remote professionals across multiple functions, including virtual assistants, administrative support, customer service, recruitment, finance, digital marketing, technology support, and business development. Our goal is to simplify hiring, reduce operational overhead, and free leadership teams to focus on core growth. We operate as an extension of our clients’ teams, emphasizing quality, cultural fit, transparency, and long-term collaboration.\n\nTASK:\nBased on the provided company-level information, generate the following LinkedIn outreach content on behalf of EasyOutsource:\n\n1. A short LinkedIn connection request note\n2. A polite LinkedIn follow-up DM message (to be sent after connection acceptance)\n\nAVAILABLE CONTEXT:\n\n* Target company name\n* Target company description, industry, market, or recent activity (if available)\n* EasyOutsource company overview (who we are and what we do)\n\nIMPORTANT CONSTRAINTS:\n\n* You do NOT have personal information about the recipient\n* Do NOT assume or mention job titles, roles, seniority, or responsibilities\n* Do NOT infer personal details under any circumstance\n\nPERSONALIZATION RULES:\n\n* Personalize ONLY using company-level context\n* Reference the target company’s industry, business model, growth stage, or market signals when possible\n* If company context is weak or missing, keep messaging neutral and curiosity-driven\n* Never mention missing data\n\nSTYLE GUIDELINES:\n\n* Professional, clear, and human\n* Non-salesy, non-pushy\n* No emojis, no hashtags, no buzzwords\n* No mention of automation, scraping, AI, or tools\n* Suitable for cold outreach to any role within a company\n\nLINKEDIN MESSAGE RULES:\n\n* Connection note must be concise and respectful (max 140 characters)\n* Follow-up DM should be polite and value-oriented (max 600 characters)\n* Use neutral phrasing suitable for any role\n* Focus on relevance, curiosity, or light operational value\n\nSTRICT OUTPUT RULES:\n\n* Return ONLY valid JSON\n* Do NOT include markdown\n* Do NOT include explanations\n* Do NOT include tool names\n\nOUTPUT FORMAT (EXACT):\n{\n\"connection_note\": \"string\",\n\"dm_message\": \"string\"\n}\n\nIf company information is insufficient, generate safe, generic outreach messages without mentioning missing data.\n\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        880,
+        1984
+      ],
+      "id": "d472420a-fe7a-40a4-bb4f-80d0ae0bfeb4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "query": "=What is the basic information about the company {{ $json['Company LinkedIn Profile'] }} ",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavily",
+      "typeVersion": 1,
+      "position": [
+        656,
+        2112
+      ],
+      "id": "ede5374b-b8a8-46f8-aad6-ffa8cc53e754",
+      "name": "Search about the company",
+      "credentials": {
+        "tavilyApi": {
+          "id": "9AIMZsA6icR44l7O",
+          "name": "Tavily account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Name of Person: {{ $('Loop Over Items').item.json.decision_maker_name }}\nCompany Name: {{ $('Loop Over Items').item.json.companyName }}\nComapny Description: {{ $('Loop Over Items').item.json.descriptionText }}\nHiring Pain Hypothesis: {{ $('Loop Over Items').item.json.hiring_pain_hypothesis }}",
+        "options": {
+          "systemMessage": "=\nYou are a professional B2B outreach assistant specializing in company-level cold email outreach.\n\nABOUT WHO WE ARE:\nEasyOutsource is a global remote outsourcing and staffing solutions provider. We help businesses scale by connecting them with top-tier remote professionals across multiple functions, including virtual assistants, administrative support, customer service, recruitment, finance, digital marketing, technology support, and business development. Our goal is to simplify hiring, reduce operational overhead, and free leadership teams to focus on core growth. We operate as an extension of our clients’ teams, emphasizing quality, cultural fit, transparency, and long-term collaboration.\n\nTASK:\nBased on the provided company-level information:\nwrite a personalized cold email on behalf of EasyOutsource and send it immediately using the Mail tool attached to this agent.\n\n\nAVAILABLE CONTEXT:\n\n* Target company name\n* Target company description, industry, market, or recent activity (if available)\n* EasyOutsource company overview (who we are and what we do)\n* Target Persona\n* Hiring Pain Hypothesis\n* Name of the person whom Email will be written\n\nIMPORTANT CONSTRAINTS:\n\n* You do NOT have personal information about the recipient\n* Do NOT assume or mention job titles, roles, seniority, or responsibilities\n* Do NOT infer personal details under any circumstance\n\nPERSONALIZATION RULES:\n\n* Personalize ONLY using company-level context\n* Reference the target company’s industry, business model, growth stage, or market signals when possible\n* If company context is weak or missing, keep messaging neutral and curiosity-driven\n* Never mention missing data\n\n\nEMAIL SENDING INSTRUCTION:\n\n* Use the Mail tool attached to this agent to send the email automatically\n* Send the email immediately after generating it\n* Do NOT include the sending instructions in the email content\n* Do NOT mention the Mail tool in the email\n\nEMAIL WRITING RULES:\n\n* Subject line must be clear, relevant, and attention-grabbing\n* Body must be structured: opening → relevance → value → soft call-to-action\n* Tone must be professional, consultative, and human\n* Do NOT hard sell or push\n* Keep email concise but complete (approximately 120–200 words)\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2416,
+        2128
+      ],
+      "id": "9431ced6-815c-4048-82c2-efde62c49d7a",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "content": "## This workflow extracts the Job post info present on linkedin and put them in google sheets and then qualify them based on the EasyOutsource's ICP.\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+        "height": 688,
+        "width": 2432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "7fc4eb27-6a4d-45f7-90a2-a85c41d794e3",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.apify.com/v2/acts/hKByXkMQaC5Qt9UMN/run-sync-get-dataset-items",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "apifyApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "maxItems",
+              "value": "100"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"urls\": [\n    \"https://www.linkedin.com/jobs/search/?keywords=(Travel%20OR%20%22Real%20Estate%22%20OR%20Finance)%20AND%20(Operations%20OR%20Support%20OR%20Admin%20OR%20Marketing%20OR%20SDR%20OR%20Analyst)%20NOT%20(VP%20OR%20Director%20OR%20Chief%20OR%20Principal)&f_TPR=r2592000&f_WT=2&geoId=103644278\",\n    \"https://www.linkedin.com/jobs/search/?keywords=(Travel%20OR%20%22Real%20Estate%22%20OR%20Finance)%20AND%20(Operations%20OR%20Support%20OR%20Admin%20OR%20Marketing%20OR%20SDR%20OR%20Analyst)%20NOT%20(VP%20OR%20Director%20OR%20Chief%20OR%20Principal)&f_TPR=r2592000&f_WT=2&geoId=101174742\"\n  ],\n  \"rows\": 20,\n  \"start\": 0,\n  \"scrapeDescription\": true,\n  \"scrapeCompany\": true,\n  \"minDelay\": 3,\n  \"maxDelay\": 7\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        64
+      ],
+      "id": "1a2b7877-a566-490e-a4d6-078de57f9146",
+      "name": "Job Scraper",
+      "credentials": {
+        "apifyApi": {
+          "id": "hm4JZykHPJCFZpQn",
+          "name": "Apify account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 914568366,
+          "mode": "list",
+          "cachedResultName": "RawJobPost",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=914568366"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        304
+      ],
+      "id": "e9fb7af6-7ae7-46d4-a547-45fd0da75cab",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        816,
+        48
+      ],
+      "id": "5990c43d-62b2-4348-b86d-9c2b6cf069bc",
+      "name": "Loop Over Items3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": "moonshotai/kimi-k2-instruct-0905",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        400
+      ],
+      "id": "7cc24227-3adc-4af7-ae5b-d6d5f46e7e19",
+      "name": "Groq Chat Model3",
+      "credentials": {
+        "groqApi": {
+          "id": "wvBbNtX5UN8lTvGq",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert Lead Qualifier for an Outsourcing Agency.\nWe sell remote staff (Support, Admin, Ops, Sales, Finance) to US/Canada companies.\n\nINPUT DATA:\n- Job Title: {{ $json.title }}\n- Company: {{ $json.companyName }}\n- Job Description snippet: {{ $json.descriptionHtml }}\n\nTASK:\n1. CALCULATE OUTSOURCEABILITY SCORE (0-10):\n   - Score HIGH (8-10) if role is: Operations, Customer Support, Marketing, Finance Ops, Admin, SDR, Analyst.\n   - Score LOW (0-4) if role is: Management, Executive, Highly Technical (DevOps), or Physical Labor.\n2. IDENTIFY THE DECISION MAKER (DM):\n   - Determine who would be the direct manager for this hire.\n   - Example: If hiring \"SDR\" -> Target \"Head of Sales\".\n   - Example: If hiring \"Admin Assistant\" -> Target \"Operations Manager\" or \"CEO\".\n   - Example: If hiring \"Customer Support\" -> Target \"Head of Customer Experience\".\n   - IMPORTANT: Do NOT target HR or Recruiters. Target the Department Head.\n\nOUTPUT JSON ONLY:\n{\n  \"outsourceability_score\": number,\n  \"is_valid_lead\": boolean,\n  \"reason\": \"String explanation\",\n  \"target_persona_search_phrase\": \"String (e.g., Head of Sales)\",\n  \"hiring_pain_hypothesis\": \"String (e.g., They are scaling sales but need cheaper SDRs)\"\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        944,
+        176
+      ],
+      "id": "2c5a2fcc-8a9d-4e86-8efb-3cfd288934a3",
+      "name": "Lead Scorer"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Get the raw text from the 'output' property seen in the screenshot\nconst rawText = $input.first().json.output;\n\n// 2. Clean up Markdown code blocks if they exist\n// We use a case-insensitive regex to catch ```JSON or ```json\nconst cleanJson = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();\n\n// 3. Parse the string into actual data items\ntry {\n  const parsedData = JSON.parse(cleanJson);\n  \n  // Return as an array of items for n8n to process properly\n  return Array.isArray(parsedData) ? parsedData : [parsedData];\n  \n} catch (error) {\n  // If parsing fails, return a standardized error object\n  return [{\n    outsourceability_score: 0,\n    is_valid_lead: false,\n    reason: \"Error parsing JSON string\",\n    error_details: error.message,\n    raw_received: rawText.substring(0, 100) // Helpful for debugging\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        176
+      ],
+      "id": "f59128b7-79b4-4cc4-8b5e-6df9560925fd",
+      "name": "cleaner"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e32ca0d6-9589-422e-a2e1-3a12cd970685",
+              "leftValue": "={{ $json.outsourceability_score }}",
+              "rightValue": 7,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1520,
+        176
+      ],
+      "id": "b1511dae-25e5-4643-9c20-cd94a752c22f",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"row_number\": {{ JSON.stringify($('Get row(s) in sheet').item.json.row_number ?? 'not mentioned') }},\n  \"link\": {{ JSON.stringify($('Get row(s) in sheet').item.json.link ?? 'not mentioned') }},\n  \"title\": {{ JSON.stringify($('Get row(s) in sheet').item.json.title ?? 'not mentioned') }},\n  \"companyName\": {{ JSON.stringify($('Get row(s) in sheet').item.json.companyName ?? 'not mentioned') }},\n  \"companyLinkedinUrl\": {{ JSON.stringify($('Get row(s) in sheet').item.json.companyLinkedinUrl ?? 'not mentioned') }},\n  \"location\": {{ JSON.stringify($('Get row(s) in sheet').item.json.location ?? 'not mentioned') }},\n  \"salaryInfo\": {{ JSON.stringify($('Get row(s) in sheet').item.json.salaryInfo ?? 'not mentioned') }},\n  \"postedAt\": {{ JSON.stringify($('Get row(s) in sheet').item.json.postedAt ?? 'not mentioned') }},\n  \"benefits\": {{ JSON.stringify($('Get row(s) in sheet').item.json.benefits ?? 'not mentioned') }},\n  \"applicantsCount\": {{ JSON.stringify($('Get row(s) in sheet').item.json.applicantsCount ?? 'not mentioned') }},\n  \"applyUrl\": {{ JSON.stringify($('Get row(s) in sheet').item.json.applyUrl ?? 'not mentioned') }},\n  \"descriptionText\": {{ JSON.stringify($('Get row(s) in sheet').item.json.descriptionText ?? 'not mentioned') }},\n  \"jobPosterName\": {{ JSON.stringify($('Get row(s) in sheet').item.json.jobPosterName ?? 'not mentioned') }},\n  \"jobPosterTitle\": {{ JSON.stringify($('Get row(s) in sheet').item.json.jobPosterTitle ?? 'not mentioned') }},\n  \"jobPosterProfileUrl\": {{ JSON.stringify($('Get row(s) in sheet').item.json.jobPosterProfileUrl ?? 'not mentioned') }},\n  \"seniorityLevel\": {{ JSON.stringify($('Get row(s) in sheet').item.json.seniorityLevel ?? 'not mentioned') }},\n  \"employmentType\": {{ JSON.stringify($('Get row(s) in sheet').item.json.employmentType ?? 'not mentioned') }},\n  \"jobFunction\": {{ JSON.stringify($('Get row(s) in sheet').item.json.jobFunction ?? 'not mentioned') }},\n  \"industries\": {{ JSON.stringify($('Get row(s) in sheet').item.json.industries ?? 'not mentioned') }},\n  \"companyAddress\": {{ JSON.stringify($('Get row(s) in sheet').item.json.companyAddress ?? 'not mentioned') }},\n  \"companyWebsite\": {{ JSON.stringify($('Get row(s) in sheet').item.json.companyWebsite ?? 'not mentioned') }},\n  \"companyEmployeesCount\": {{ JSON.stringify($('Get row(s) in sheet').item.json.companyEmployeesCount ?? 'not mentioned') }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1744,
+        240
+      ],
+      "id": "7a154ec1-b8ee-47a4-aae1-6f116f34262c",
+      "name": "GetDataFromSheet2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1968,
+        176
+      ],
+      "id": "1fcc7a9e-53ba-49d9-8296-6e9934e53cdb",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2123132209,
+          "mode": "list",
+          "cachedResultName": "Required_Jobs2.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=2123132209"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "outsourceability_score",
+              "displayName": "outsourceability_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "is_valid_lead",
+              "displayName": "is_valid_lead",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "target_persona_search_phrase",
+              "displayName": "target_persona_search_phrase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "hiring_pain_hypothesis",
+              "displayName": "hiring_pain_hypothesis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyName",
+              "displayName": "companyName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyLinkedinUrl",
+              "displayName": "companyLinkedinUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "salaryInfo",
+              "displayName": "salaryInfo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Follow up message",
+              "displayName": "Follow up message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "benefits",
+              "displayName": "benefits",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "applyUrl",
+              "displayName": "applyUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "descriptionText",
+              "displayName": "descriptionText",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "jobPosterName",
+              "displayName": "jobPosterName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "jobPosterTitle",
+              "displayName": "jobPosterTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Connection Note",
+              "displayName": "Connection Note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "seniorityLevel",
+              "displayName": "seniorityLevel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "employmentType",
+              "displayName": "employmentType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "jobFunction",
+              "displayName": "jobFunction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "industries",
+              "displayName": "industries",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyAddress",
+              "displayName": "companyAddress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyWebsite",
+              "displayName": "companyWebsite",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "decision_maker_name",
+              "displayName": "decision_maker_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "decision_maker_title",
+              "displayName": "decision_maker_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "decision_maker_url",
+              "displayName": "decision_maker_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "decision_maker_reason",
+              "displayName": "decision_maker_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2192,
+        304
+      ],
+      "id": "dfc1f808-fda7-4bfa-9164-f85b0342f819",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const companyName = $(\"Loop Companies\").first().json.company_name;\nconst results = $input.all()[0].json.organic || [];\n\n// Regex to match required roles\nconst rolePattern = /(recruiter|talent|people|hr|founder|ceo|hiring)/i;\n\n// Filter and format\nconst profiles = results.filter(item => {\n  // 1. Must be a profile URL\n  const isProfile = item.link && item.link.includes(\"linkedin.com/in/\");\n  // 2. Must match role keywords in title or snippet\n  const textToCheck = (item.title + \" \" + item.snippet).toLowerCase();\n  const hasRole = rolePattern.test(textToCheck);\n  \n  return isProfile && hasRole;\n}).map(item => {\n  return {\n    url: item.link,\n    company_name: companyName\n  };\n});\n\n// Deduplicate by URL\nconst uniqueProfiles = [...new Map(profiles.map(item => [item['url'], item])).values()];\n\nreturn uniqueProfiles;"
+      },
+      "id": "ec562cf0-16ac-44df-a55b-a03c2c18ac1e",
+      "name": "Filter Decision Makers",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        1088
+      ],
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        176,
+        1152
+      ],
+      "id": "8d675016-512b-47db-ad08-371d7ce3454f",
+      "name": "Start Workflow"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2123132209,
+          "mode": "list",
+          "cachedResultName": "Required_Jobs2.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=2123132209"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        576,
+        1600
+      ],
+      "id": "bc988f50-ec9d-4d84-9b66-92151e9e2fb7",
+      "name": "Read Jobs Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 602846797,
+          "mode": "list",
+          "cachedResultName": "enriched_DMs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=602846797"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        800,
+        1600
+      ],
+      "id": "807de1ba-7226-405f-8da3-277e65b6cf1b",
+      "name": "Read DM Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Get Data\nconst jobs = $('Read Jobs Sheet').all();\nconst dms = $('Read DM Sheet').all();\n\n// 2. Create a \"Dictionary\" of DMs by Company\nconst dmMap = {};\n\ndms.forEach(item => {\n  const company = (item.json.companyName || \"\").toLowerCase().trim();\n  if (company) {\n    if (!dmMap[company]) {\n      dmMap[company] = [];\n    }\n    dmMap[company].push({\n      fullName: item.json.fullName,\n      title: item.json.jobTitle,\n      headline: item.json.headline,\n      url: item.json.linkedinPublicUrl\n    });\n  }\n});\n\n// 3. Attach DMs to Jobs (KEEP ALL JOBS)\nconst results = [];\n\njobs.forEach((jobItem, index) => {\n  const job = jobItem.json;\n  const companyName = (job.companyName || \"\").toLowerCase().trim();\n  \n  // Find matches (or empty array if none)\n  const potentialDMs = dmMap[companyName] || [];\n  \n  // PUSH EVERYTHING (Even if 0 matches)\n  results.push({\n    json: {\n      ...job,\n      _jobRowIndex: index + 2,\n      _match_count: potentialDMs.length, // Helpful for debugging\n      _potential_candidates: potentialDMs\n    }\n  });\n});\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        1600
+      ],
+      "id": "647ee772-f05b-428c-a10a-44b792ff6614",
+      "name": "Link Jobs to DMs"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2123132209,
+          "mode": "list",
+          "cachedResultName": "Required_Jobs2.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=2123132209"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "link": "={{ $json.link }}",
+            "Decision Maker": "={{ $json.decision_maker_name }}",
+            "Decision Maker LI URL": "={{ $json.decision_maker_url }}",
+            "Reason": "={{ $json.decision_maker_reason }}",
+            "Decision Maker Title": "={{ $json.decision_maker_title }}"
+          },
+          "matchingColumns": [
+            "link"
+          ],
+          "schema": [
+            {
+              "id": "outsourceability_score",
+              "displayName": "outsourceability_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "is_valid_lead",
+              "displayName": "is_valid_lead",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "target_persona_search_phrase",
+              "displayName": "target_persona_search_phrase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "hiring_pain_hypothesis",
+              "displayName": "hiring_pain_hypothesis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyName",
+              "displayName": "companyName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyLinkedinUrl",
+              "displayName": "companyLinkedinUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "salaryInfo",
+              "displayName": "salaryInfo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "postedAt",
+              "displayName": "postedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "benefits",
+              "displayName": "benefits",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "applicantsCount",
+              "displayName": "applicantsCount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "applyUrl",
+              "displayName": "applyUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "descriptionText",
+              "displayName": "descriptionText",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "jobPosterName",
+              "displayName": "jobPosterName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "jobPosterTitle",
+              "displayName": "jobPosterTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "jobPosterProfileUrl",
+              "displayName": "jobPosterProfileUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "seniorityLevel",
+              "displayName": "seniorityLevel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "employmentType",
+              "displayName": "employmentType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "jobFunction",
+              "displayName": "jobFunction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "industries",
+              "displayName": "industries",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyAddress",
+              "displayName": "companyAddress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyWebsite",
+              "displayName": "companyWebsite",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyEmployeesCount",
+              "displayName": "companyEmployeesCount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision Maker",
+              "displayName": "Decision Maker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Decision Maker LI URL",
+              "displayName": "Decision Maker LI URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Decision Maker Title",
+              "displayName": "Decision Maker Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        1824,
+        1600
+      ],
+      "id": "618e9898-fe8a-4800-ae1a-8607fe0b4c3c",
+      "name": "Update Job Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert B2B Lead Researcher & Recruiter.\n\nYOUR GOAL:\nAnalyze the Job Post below and the list of Company Employees. Select the SINGLE best person to outreach for this specific role.\n\n### THE JOB DETAILS\n- **Role:** {{ $json.title }}\n- **Company:** {{ $json.companyName }}\n- **Pain Point:** {{ $json.hiring_pain_hypothesis }}\n- **Description:** {{ $json.descriptionText }}\n\n### THE CANDIDATES (Employees at {{ $json.companyName }})\n{{ JSON.stringify($json._potential_candidates) }}\n\n### SELECTION RULES\n1. **Relevance:** Look for the person who would likely be the boss or hiring manager for this role.\n   - If Job is \"Sales Rep\" -> Look for \"VP of Sales\", \"Head of Sales\", or \"CRO\".\n   - If Job is \"Engineer\" -> Look for \"CTO\", \"VP of Engineering\", or \"Engineering Manager\".\n   - If Job is \"Marketing\" -> Look for \"CMO\", \"Head of Marketing\".\n2. **Seniority:** Prioritize C-Level > VP > Head/Director. Avoid individual contributors (like \"Senior Engineer\") unless no managers are listed.\n3. **Fallback:** If NO relevant manager is found in the list, return \"No suitable match found\".\n\n### OUTPUT FORMAT\nYou must output a VALID JSON object only. Do not add markdown formatting (like ```json).\n\n{\n  \"selected_dm\": {\n    \"name\": \"Full Name\",\n    \"title\": \"Exact Job Title\",\n    \"linkedin_url\": \"The public LinkedIn URL from the data\",\n    \"match_reason\": \"One sentence explaining why they are the decision maker for this specific job.\"\n  }\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1248,
+        1504
+      ],
+      "id": "657a0546-f866-475d-96cb-d9ac5f0c101d",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "model": "moonshotai/kimi-k2-instruct-0905",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        1728
+      ],
+      "id": "82099ee0-9898-404b-8023-db36c3c14ad9",
+      "name": "Groq Chat Model4",
+      "credentials": {
+        "groqApi": {
+          "id": "wvBbNtX5UN8lTvGq",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Get the original data (which contains 'link', 'companyName', etc.)\n// We refer to the node exactly as it appears in your screenshot: \"Link Jobs to DMs\"\nconst originalJobs = $('Link Jobs to DMs').all();\n\nreturn items.map((item, index) => {\n  try {\n    // 2. Grab the specific original job that matches this AI result\n    // We use [index] because the items follow the exact same order (1st Job -> 1st AI Answer)\n    const originalJobData = originalJobs[index] ? originalJobs[index].json : {};\n\n    // 3. Parse the AI Text\n    // We check 'output' because that is what your screenshot shows\n    let rawText = item.json.output || \"{}\";\n    \n    // Clean up if the AI added markdown blocks like ```json\n    rawText = rawText.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n    \n    // Parse the text into a real object\n    const parsedData = JSON.parse(rawText);\n    const dm = parsedData.selected_dm || {};\n\n    // 4. Return the MERGED data\n    // We spread (...originalJobData) first, so we get 'link' back!\n    return {\n      json: {\n        ...originalJobData, \n        decision_maker_name: dm.name || \"No Match Found\",\n        decision_maker_title: dm.title || \"\",\n        decision_maker_url: dm.linkedin_url || \"\",\n        decision_maker_reason: dm.match_reason || \"\"\n      }\n    };\n\n  } catch (error) {\n    // Fallback in case of error, still return original data so the flow doesn't break\n    const originalJobData = originalJobs[index] ? originalJobs[index].json : {};\n    return {\n      json: {\n        ...originalJobData,\n        decision_maker_name: \"Error Parsing AI\",\n        decision_maker_reason: error.message\n      }\n    };\n  }\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        1600
+      ],
+      "id": "7e28bfc8-30bb-4049-b55a-586f7cf4b95b",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "sendTo": "=abrehmanmughal1234@gmail.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        2736,
+        2336
+      ],
+      "id": "b2145fb9-ecdd-4230-9890-feca07f8efaa",
+      "name": "Mail",
+      "webhookId": "b16010d4-73e8-4b7d-8434-195a48bc35e9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "geA2SPaNXCbXZH81",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://google.serper.dev/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-KEY",
+              "value": "afda9fc4da135d4df5616bb5cea2459bdc198449"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ 'site:linkedin.com/in (recruiter OR hiring OR talent OR founder OR CEO OR HR) \"' + $json.companyName + '\"' }}"
+            },
+            {
+              "name": "num",
+              "value": "10"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a4d0ea3a-56a1-4c70-8e06-6c4343daaf5c",
+      "name": "Serper Search,finding Decision Makers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        848,
+        1088
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1353480304,
+          "mode": "list",
+          "cachedResultName": "Required_jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=1353480304"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Is Duplicate",
+              "lookupValue": "No"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eb47850d-7839-4b43-84b8-dc45e32ef6b2",
+      "name": "Get Companies",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        400,
+        1152
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "54c80250-45df-4ae5-bb98-28338b6da258",
+      "name": "Loop Companies",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        624,
+        1152
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 914568366,
+          "mode": "list",
+          "cachedResultName": "RawJobPost",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=914568366"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "trackingId",
+              "displayName": "trackingId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "refId",
+              "displayName": "refId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyName",
+              "displayName": "companyName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyLinkedinUrl",
+              "displayName": "companyLinkedinUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyLogo",
+              "displayName": "companyLogo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "salaryInfo",
+              "displayName": "salaryInfo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "postedAt",
+              "displayName": "postedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "benefits",
+              "displayName": "benefits",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "descriptionHtml",
+              "displayName": "descriptionHtml",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "applicantsCount",
+              "displayName": "applicantsCount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "applyUrl",
+              "displayName": "applyUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "salary",
+              "displayName": "salary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "descriptionText",
+              "displayName": "descriptionText",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "seniorityLevel",
+              "displayName": "seniorityLevel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "employmentType",
+              "displayName": "employmentType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "jobFunction",
+              "displayName": "jobFunction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "industries",
+              "displayName": "industries",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "inputUrl",
+              "displayName": "inputUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyAddress",
+              "displayName": "companyAddress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyWebsite",
+              "displayName": "companyWebsite",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyDescription",
+              "displayName": "companyDescription",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companyEmployeesCount",
+              "displayName": "companyEmployeesCount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "companySlogan",
+              "displayName": "companySlogan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "jobPosterName",
+              "displayName": "jobPosterName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "jobPosterTitle",
+              "displayName": "jobPosterTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "jobPosterPhoto",
+              "displayName": "jobPosterPhoto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "jobPosterProfileUrl",
+              "displayName": "jobPosterProfileUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        400,
+        64
+      ],
+      "id": "be480aa6-6974-4c05-842e-541884fe75bc",
+      "name": "Adding scraped Jobs in sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Qualifying the Decision Makers so that we can outreach the relevant Decision Makers\n\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+        "height": 464,
+        "width": 2048,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        112,
+        1392
+      ],
+      "typeVersion": 1,
+      "id": "07fc041d-bf85-4739-a6e4-6b545201198a",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Scraping all of the relevant info like ICP's website,their pain points in order to make a personalised message and then outreach them on linkedin\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+        "height": 736,
+        "width": 3248
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        1920
+      ],
+      "typeVersion": 1,
+      "id": "5a5480e5-704c-4b49-a2ad-7a0a29522714",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1353480304,
+          "mode": "list",
+          "cachedResultName": "Required_jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=1353480304"
+        },
+        "options": {}
+      },
+      "id": "012c9f45-18a8-4fa3-b8a4-eaff313a69f9",
+      "name": "Read All Jobs",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        192,
+        704
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "Select your Sheet here"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Create a Set to remember links we have already seen\nconst seenLinks = new Set();\n\nreturn items.map((item, index) => {\n  // 2. Get the link from the current row\n  // We use safe navigation and trim whitespace\n  const link = (item.json.link || \"\").toString().trim();\n  \n  let isDuplicate = \"No\";\n  \n  // 3. Logic: If the Set already has this link, it's a duplicate.\n  if (link && seenLinks.has(link)) {\n    isDuplicate = \"Yes\";\n  } else if (link) {\n    // If it's new (and not empty), add it to the Set\n    seenLinks.add(link);\n    isDuplicate = \"No\";\n  }\n\n  // 4. Return the data with the new status and the exact Row Number\n  // (Google Sheets starts at Row 1 (Header), so data starts at Row 2)\n  return {\n    json: {\n      ...item.json,\n      calculated_duplicate_status: isDuplicate,\n      row_number_to_update: index + 2\n    }\n  };\n});"
+      },
+      "id": "8366cd6d-b356-49d3-bf9c-d066d0c5f716",
+      "name": "Identify Duplicates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q",
+          "mode": "list",
+          "cachedResultName": "EasyOutsourceOutreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1353480304,
+          "mode": "list",
+          "cachedResultName": "Required_jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1svp9d8_UHAlevZ7gdIhspfoDpOVvQWh3YWD7Y3t9o8Q/edit#gid=1353480304"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "link": "={{ $json.link }}",
+            "Is Duplicate": "={{ $json.calculated_duplicate_status }}"
+          },
+          "matchingColumns": [
+            "link"
+          ],
+          "schema": [
+            {
+              "id": "outsourceability_score",
+              "displayName": "outsourceability_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "is_valid_lead",
+              "displayName": "is_valid_lead",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "target_persona_search_phrase",
+              "displayName": "target_persona_search_phrase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "hiring_pain_hypothesis",
+              "displayName": "hiring_pain_hypothesis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyName",
+              "displayName": "companyName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyLinkedinUrl",
+              "displayName": "companyLinkedinUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyLogo",
+              "displayName": "companyLogo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "salaryInfo",
+              "displayName": "salaryInfo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "postedAt",
+              "displayName": "postedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "benefits",
+              "displayName": "benefits",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "descriptionHtml",
+              "displayName": "descriptionHtml",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "applicantsCount",
+              "displayName": "applicantsCount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "applyUrl",
+              "displayName": "applyUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "salary",
+              "displayName": "salary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "descriptionText",
+              "displayName": "descriptionText",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "jobPosterName",
+              "displayName": "jobPosterName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "jobPosterTitle",
+              "displayName": "jobPosterTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "jobPosterPhoto",
+              "displayName": "jobPosterPhoto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "jobPosterProfileUrl",
+              "displayName": "jobPosterProfileUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "seniorityLevel",
+              "displayName": "seniorityLevel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "employmentType",
+              "displayName": "employmentType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "jobFunction",
+              "displayName": "jobFunction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "industries",
+              "displayName": "industries",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "inputUrl",
+              "displayName": "inputUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyAddress",
+              "displayName": "companyAddress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyWebsite",
+              "displayName": "companyWebsite",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companySlogan",
+              "displayName": "companySlogan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyDescription",
+              "displayName": "companyDescription",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyEmployeesCoun",
+              "displayName": "companyEmployeesCoun",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "companyEmployeesCount",
+              "displayName": "companyEmployeesCount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Is Duplicate",
+              "displayName": "Is Duplicate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "fad417fb-811d-46f7-b4cd-512c89e35e08",
+      "name": "Write Status to Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        624,
+        704
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KdxDcW19LPKcmeVD",
+          "name": "Google Sheets account"
+        }
+      },
+      "notes": "Select same Sheet here"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Found Profiles?": {
+      "main": [
+        [
+          {
+            "node": "Normalize Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Data": {
+      "main": [
+        [
+          {
+            "node": "Save to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Safety Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Companies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Sheets": {
+      "main": [
+        [
+          {
+            "node": "Safety Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Lead Fields1": {
+      "main": [
+        [
+          {
+            "node": "Safety Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Filter Processed Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Processed Leads": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Check URL Validity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check URL Validity": {
+      "main": [
+        [
+          {
+            "node": "Search about the company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Output": {
+      "main": [
+        [
+          {
+            "node": "Normalize Lead Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Safety Wait2": {
+      "main": [
+        [
+          {
+            "node": "Send to Expandi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search about the company": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job Scraper": {
+      "main": [
+        [
+          {
+            "node": "Adding scraped Jobs in sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items3": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Lead Scorer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Lead Scorer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Scorer": {
+      "main": [
+        [
+          {
+            "node": "cleaner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cleaner": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "GetDataFromSheet2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetDataFromSheet2": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Decision Makers": {
+      "main": [
+        [
+          {
+            "node": "Found Profiles?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get Companies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Jobs Sheet": {
+      "main": [
+        [
+          {
+            "node": "Read DM Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read DM Sheet": {
+      "main": [
+        [
+          {
+            "node": "Link Jobs to DMs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Link Jobs to DMs": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Update Job Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Serper Search,finding Decision Makers": {
+      "main": [
+        [
+          {
+            "node": "Filter Decision Makers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Companies": {
+      "main": [
+        [
+          {
+            "node": "Loop Companies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Companies": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Serper Search,finding Decision Makers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read All Jobs": {
+      "main": [
+        [
+          {
+            "node": "Identify Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Identify Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Write Status to Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "7917f6cb-06a7-4485-a0ef-a4ea47740989",
+  "meta": {
+    "instanceId": "4b65064df2dd38b501cffe3080422b6bc2b26b9acf43349ccc12abfa9f0f6953"
+  },
+  "id": "p02aVNsyovJeqp5TUDL24",
+  "tags": []
+}
