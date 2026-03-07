@@ -7,3 +7,9 @@ https://n8n.io/workflows/
 https://github.com/Zie619/n8n-workflows/tree/main/workflows
 
 https://n8nworkflows.xyz/
+
+https://zie619.github.io/n8n-workflows/
+
+https://github.com/enescingoz/awesome-n8n-templates
+
+https://github.com/wassupjay/n8n-free-templates
