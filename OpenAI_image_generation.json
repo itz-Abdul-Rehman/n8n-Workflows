@@ -1,0 +1,448 @@
+{
+  "name": "10. OpenAI image generation",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        232,
+        700
+      ],
+      "id": "eb6f2442-c5a2-4ab2-a83e-b1899d558e21",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are expert Linkedin Post writer. Make sure tone is conversational and casual. Use some emojis and joke or two. Make sure no line is longer than tweet\nBelow are some of the example in which format the Linkedin Post need to be written\n\nExample 1: \nMost companies will lay off 70% of their engineers.\n\nNot because they’re failing…\n\nBut because they won’t need them anymore.\n\nHere’s why this is about to get wild:\n\nRight now, LLMs can write functional code.\nIn 12–18 months? They’ll write full-stack systems from prompts.\n\nThe shocking part?\n\nTo build the exact same product, a company will only need 20-30% of the engineers it has today.\n\nThis means:\n\nThe short term?\nMass layoffs.\nBrilliant devs getting blindsided.\n\nThe long term?\nCoding becomes elite.\n0.01% will still write code like rocket scientists.\nEveryone else will build apps like writing Google Docs.\n\nThink Notion + Midjourney + GitHub Copilot… on steroids.\n\nEngineering is not dying.\nIt’s just shifting to the hands of prompt-native creators.\n\nAnd the ones who adapt?\nWill ship 10x faster than entire legacy teams.\n\nSo…\n\nAre we entering the golden age of builders or the dark age of engineers?\n\nExample 2:\n🚨 Zomato just laid off 600 employees.\n\nWhy? Because their AI system, Nugget, now handles 80% of customer queries, managing 15 million+ chats a month without human intervention. 😲\n\nBut here’s the twist.\n These weren't underperformers. In fact, they were part of Zomato's Associate Accelerator Program (ZAAP)—a program that trained 1,500 freshers for customer success roles. \nThey were earning ₹4.5 LPA. And now? Replaced by software.\n\nAI didn’t just take over… it optimized the system.\n Nugget slashes costs, improves speed, and enhances accuracy. It doesn’t just replace employees—it makes the whole process leaner, faster, and cheaper.\n\nZomato’s move is a glimpse into the future of the workforce.\n\n Customer success roles are just the beginning. Tomorrow? Software engineers, marketers, analysts, even operations roles could follow.\n Not because the jobs disappear, but because AI will only need 20% of the workforce it once did.\n\nThis isn’t just about cost-cutting.\n\n It’s about survival.\n\nCompanies will shrink, but they’ll be more efficient, agile, and competitive.\n\nThe question now is—Would you trust AI to manage your job? Or your future?\n\nExample 3:\nMukesh Ambani’s daughter is using AI to disrupt the fashion industry in India. Here’s how\n\nFor years, global giants like Zara and H&M have dominated premium fashion in India. Billions in revenue, billions in data…\n\nbut they still don’t really know what Indians want.\n\nEnter Azorte — the game-changing fashion brand spearheaded by Isha Ambani, Mukesh Ambani’s daughter. \n\nAnd it’s not just another retail store.\n\nWhat if I told you that shopping at Azorte feels more like stepping into the future?\n\nHere’s what’s happening inside these stores:\nAI-powered trial rooms: No more awkwardly shouting for a different size.\nRequest it with a button and it’ll be brought to you.\n\nFashion Discovery Stations: These stations scan your body type and recommend perfect fits, all powered by AI.\n\nZero checkout lines: Shop, scan, and pay with your phone. No waiting in queues.\n\nBut here’s the kicker: Azorte isn’t just selling clothes. It’s collecting massive amounts of data on YOU.\n\nWhile Zara and H&M are guessing what Indians want, Azorte knows exactly what you like, what size you need, and how much you’re willing to pay. \n\nAll thanks to cutting-edge tech.\n\nAlready launched in Gurugram after successful openings in Mumbai and Pune, Azorte’s strategy is simple:\n\nBring international styles.\n\nMix it with Indian preferences.\n\nOffer it at prices lower than H&M and Zara.\n\nWhat looks like a fashion store? It’s actually Ambani’s calculated move to dominate the $100 billion Indian fashion market. \n\nA move that foreign competitors can’t match — because they don’t have the tech to do it.\n\nSo, have you visited Azorte yet?\n\n Would you choose a local, tech-powered brand over international giants like Zara or H&M?\n\nDrop your thoughts below\n\nFollow for more insights on how India’s billionaires are reshaping industries with cutting-edge tech.\n\nExample 4:\nHave you ever wondered why super rich people buy expensive paintings?\n\nThe real reason would shock you!\nIt's how they multiply 5 crore rupees into 15 crore rupees overnight and that too legally.\nSounds impossible?\n\nLet me give you a hint : It's the same reason why rich people buy expensive paintings.\n\nHere is how it works in 3 steps:\n\nStep one. They buy an artwork for 5 crore rupees at a luxury auction house.\n\nStep two. They activate their secret network of art galleries, critics, and publications to create massive hype around the painting.\n\nNow here's where it gets crazy. The same painting suddenly becomes worth 50 crore rupees.\nBut wait. The real genius move? They donate it.\nLet me break down the math for you.\n\nWith a tax rate of 30 percent, donating a painting worth 50 crore rupees saves them 15 crore rupees in taxes.\nLet that sink in for a moment.\nThey only spent 5 crore rupees on the painting. \nBut they saved 15 crore rupees in taxes. That's a pure profit of 10 crore rupees, completely legal.\n\nThis is exactly why ultra rich people are so obsessed with art. It was never about the paintings. It's about the money hack that works every single time.\n\nThe one percent have been using this strategy for decades, and now you know why. Every time you see an ultra rich person donating art to a museum, you'll know what's really happening behind the scenes.\n\nSave this before it gets taken down. And follow for more wealth secrets they don't teach in school.\n\n\nJust train yourself how this post are written \nThings to note:\n1. Use First three lines of the post to drive the attention\n2. There are three part in post - The Hook (Make people click on see more), The Story (Which keeps the user engaged), CTA (End with CTA to make reader take action)\n3. Don't use \"*\" in the response\n\n\nQuick Tips:\n1. Avoid bulky long paragraphs\n2. Break the post into small lines\n3. Make it readable and mobile optimized\n4. Keep it short and simple\n5. Use 3-4 hashtags\n6. Be authentic\n\n\nYour task is to convert \n```content\n{{ $json.choices[0].message.content }}\n```\n\nThis content into Linkedin Post",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -960,
+        700
+      ],
+      "id": "a8087a16-491f-49b1-9f2a-95ce73f54f42",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -932,
+        920
+      ],
+      "id": "332b5f0e-554f-4b25-8a31-ead73aea4e3e",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "69W0MY1rH5ycGoOb",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"output\": {\n\t\t\t\"type\": \"string\"\n\t\t}\n\t}\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -800,
+        920
+      ],
+      "id": "d22aeead-b07f-4963-8880-94e3becc7911",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst updatedItems = items.map((item) => {\n  item.json.output = item.json.output.replaceAll(\"**\", \"\");\n  return item;\n});\nreturn updatedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -584,
+        700
+      ],
+      "id": "783e3206-673d-4bb0-855d-3b8bbb0f9419",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "content": "## Perplexity Search\n",
+        "height": 280,
+        "width": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1260,
+        580
+      ],
+      "id": "3e316293-41cf-48e0-a570-e33434714f04",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"sonar-pro\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a smart and helpful AI assistant that summarizes the most recent and relevant news or information based on the user's request. Search across trusted sources and provide 2–3 short summaries that are concise, informative, and easy to visualize. Always include the source or URL if available. Only show content from the past week.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Please find recent updates or news about: {{ $json.message.text }}. Summarize 2–3 key stories or developments from today ({{ $now }}) going back one week. Keep the summaries brief and mention the source.\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1180,
+        700
+      ],
+      "id": "c918c47c-86e4-44ab-bbd9-a5045b6fdd0b",
+      "name": "Perplexity Search",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "eWCvaYA434K9ehGM",
+          "name": "Perplexity API header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1400,
+        700
+      ],
+      "id": "ea3e5490-6236-4abd-8fd2-8a9baab486a2",
+      "name": "Telegram Trigger",
+      "webhookId": "3425c993-085c-49bf-bef1-7e9838684d36",
+      "credentials": {
+        "telegramApi": {
+          "id": "QRh7D3z5ltNE3Kxj",
+          "name": "Linkedin Post Bot Cred"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Linkedin Post:\n{{ $json.output }}",
+        "options": {
+          "systemMessage": "=# Role & Context:\nYou are a visual strategist AI that converts LinkedIn posts into image generation prompts. Your goal is to create visual concepts that translate the core message of a professional post into a compelling graphic suitable for a LinkedIn audience. These visuals are not literal depictions, but stylized marketing graphics that align with modern branding aesthetics. You will receive 2-3 summary of event, so for each event create proper distinguish graphic which depict the information stated in event\n\n## Your Objective:\n- Analyze the provided LinkedIn post carefully.\n- Extract the central idea, insight, or message.\n- Compose a detailed and descriptive image prompt for an AI-based text-to-image generator.\n- Ensure the image enhances the LinkedIn post by clearly communicating its message through strong visual design.\n\n## Output Format and Constraints:\n- Output only the final image description — no explanations, no post rephrasing, no quotation marks.\n- Focus on marketing-style visuals — not photorealistic scenes or stock-style imagery.\n- Never include placeholders like “Insert text here.”\n- If stats or data are mentioned in the post, include them in the visual concept.\n- Do not attach or embed any images or file links.\n- Do not output PNG file\n\n## Design Style & Considerations:\n- Think like a branding expert or creative director.\n- Aim for polished, professional visuals suitable for a LinkedIn feed.\n- Include elements like:\n  - Abstract illustrations\n  - Graphs, icons, infographics\n  - Typography and layout suggestions\n  - Motion-like effects, overlays, or symbolic imagery\n  - Metaphors that express complex ideas simply\n- Use layout cues if helpful (e.g. “split screen with icons on one side, text overlay on the other”).\n\n## Example Output Prompt:\nModern flat-design illustration of a glowing human brain interlinked with digital gears, symbolizing the integration of AI in business workflows. Soft gradient background, clean layout with space for headline text at the top. Subtle tech-themed icons embedded in the background for depth."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        -364,
+        700
+      ],
+      "id": "bf4648e2-d3e2-4548-9ded-de1f262ea4ad",
+      "name": "Image Prompt generator"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -276,
+        920
+      ],
+      "id": "4c2ac7d0-4dc7-49f4-bde9-aacb6c3ff451",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "69W0MY1rH5ycGoOb",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "person": "sLOe2wyr3H",
+        "text": "={{ $('Code').item.json.output }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        -1320,
+        -740
+      ],
+      "id": "f13c8949-44f3-41b8-8d63-3dd907b31b4b",
+      "name": "LinkedIn",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "KY53TAcGREGU1cb7",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('Code').item.json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        700
+      ],
+      "id": "ae447dfa-f163-483a-ad1e-fdd685506f6c",
+      "name": "Send msg",
+      "webhookId": "f96c5e5e-e649-4ade-b5e6-1241674a0bef",
+      "credentials": {
+        "telegramApi": {
+          "id": "QRh7D3z5ltNE3Kxj",
+          "name": "Linkedin Post Bot Cred"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        452,
+        700
+      ],
+      "id": "5451b55c-635b-4447-9e1f-26b40ba45ebf",
+      "name": "Send Photo",
+      "webhookId": "ee59ed2b-6ed9-4f37-86b5-779662d4c804",
+      "credentials": {
+        "telegramApi": {
+          "id": "QRh7D3z5ltNE3Kxj",
+          "name": "Linkedin Post Bot Cred"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-image-1"
+            },
+            {
+              "name": "prompt",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "size",
+              "value": "1024x1024"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        20,
+        700
+      ],
+      "id": "0e839593-af7c-4404-a9b2-f14e49190f25",
+      "name": "Image Generation Node",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "rhsY0b76prMqhm2s",
+          "name": "OpenAI API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Image Prompt generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perplexity Search": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Perplexity Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompt generator": {
+      "main": [
+        [
+          {
+            "node": "Image Generation Node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Image Prompt generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Send Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn": {
+      "main": [
+        []
+      ]
+    },
+    "Send msg": {
+      "main": [
+        []
+      ]
+    },
+    "Send Photo": {
+      "main": [
+        [
+          {
+            "node": "Send msg",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Generation Node": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0b62ac3c-6e09-4c44-8aab-b14aa9c2c307",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "353ac65d120d2007b8a1503e85a96651a9b2cbb94b0334693ebac2129fa6a7ee"
+  },
+  "id": "DLXzGxuJyrx6cWNx",
+  "tags": []
+}

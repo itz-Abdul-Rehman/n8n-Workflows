@@ -1,0 +1,337 @@
+{
+  "name": "Employee Interview Automation Mail",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1rOHOtoieDNJTX6dywy_Iq12JZJLCxp5uOTTeUEh36c0",
+          "mode": "list",
+          "cachedResultName": "Candidate Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rOHOtoieDNJTX6dywy_Iq12JZJLCxp5uOTTeUEh36c0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rOHOtoieDNJTX6dywy_Iq12JZJLCxp5uOTTeUEh36c0/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        -60
+      ],
+      "id": "a82c52b5-ae27-4c2b-a46b-d192e26db62c",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "ZXLsglV6KHJ6nkHO",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a helpful and professional HR assistant. When provided with a candidate's name, the position they applied for, and optionally their cover letter or experience, write a short, polite, and friendly email thanking them for their application. Make sure the tone is formal but warm. Do not mention whether they are selected or not. Just acknowledge receipt of the application and let them know the HR team will be in touch soon. In footer just mention HR Team\n\nHere is the information of Candidate:\nName: {{ $json['Full Name'] }}\nEmail: {{ $json.Email }}\nPosition Applied:{{ $json['Position Applied'] }}\nCover Letter: {{ $json['Cover Letter'] }}\nExperience:{{ $json['Experience (Years)'] }}\nSkills:{{ $json.Skills }}",
+              "role": "system"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        60,
+        -60
+      ],
+      "id": "68b40fbf-c2a3-4853-a8db-ac3f86c719a3",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "eZcefdYAgPp4I9oU",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b5794968-1d60-494b-af10-450550c3b62a",
+              "leftValue": "={{ $json['Mail Status'] }}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -180,
+        -60
+      ],
+      "id": "c6b00fda-477b-40f7-87ec-97283ea2cb07",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.message.content.to }}",
+        "subject": "={{ $json.message.content.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.message.content.body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        420,
+        -60
+      ],
+      "id": "e32c025e-52f9-4a62-aa97-d2865f56fd02",
+      "name": "Gmail",
+      "webhookId": "15b8ed78-ab90-4555-87c8-a559947a9b60",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "hsdHDoXhllFhyisx",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1rOHOtoieDNJTX6dywy_Iq12JZJLCxp5uOTTeUEh36c0",
+          "mode": "list",
+          "cachedResultName": "Candidate Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rOHOtoieDNJTX6dywy_Iq12JZJLCxp5uOTTeUEh36c0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rOHOtoieDNJTX6dywy_Iq12JZJLCxp5uOTTeUEh36c0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Google Sheets Trigger').item.json.ID }}",
+            "Mail Status": "Done"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Position Applied",
+              "displayName": "Position Applied",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Cover Letter",
+              "displayName": "Cover Letter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Experience (Years)",
+              "displayName": "Experience (Years)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Skills",
+              "displayName": "Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Mail Status",
+              "displayName": "Mail Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        640,
+        -60
+      ],
+      "id": "3c93151a-a26a-49ab-9675-abc2a1f0b68f",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "uvQG3YEEXtu5NVSj",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c47437d4-e0e1-49e8-8175-410994e036e2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "353ac65d120d2007b8a1503e85a96651a9b2cbb94b0334693ebac2129fa6a7ee"
+  },
+  "id": "8Vyq5dEIKZZXHmQB",
+  "tags": []
+}

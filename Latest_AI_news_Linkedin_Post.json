@@ -1,0 +1,485 @@
+{
+  "name": "Latest AI news Linkedin Post",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are expert Linkedin Post writer. Make sure tone is conversational and casual. Use some emojis and joke or two. Make sure no line is longer than tweet\nBelow are some of the example in which format the Linkedin Post need to be written\n\nExample 1: \nMost companies will lay off 70% of their engineers.\n\nNot because they’re failing…\n\nBut because they won’t need them anymore.\n\nHere’s why this is about to get wild:\n\nRight now, LLMs can write functional code.\nIn 12–18 months? They’ll write full-stack systems from prompts.\n\nThe shocking part?\n\nTo build the exact same product, a company will only need 20-30% of the engineers it has today.\n\nThis means:\n\nThe short term?\nMass layoffs.\nBrilliant devs getting blindsided.\n\nThe long term?\nCoding becomes elite.\n0.01% will still write code like rocket scientists.\nEveryone else will build apps like writing Google Docs.\n\nThink Notion + Midjourney + GitHub Copilot… on steroids.\n\nEngineering is not dying.\nIt’s just shifting to the hands of prompt-native creators.\n\nAnd the ones who adapt?\nWill ship 10x faster than entire legacy teams.\n\nSo…\n\nAre we entering the golden age of builders or the dark age of engineers?\n\nExample 2:\n🚨 Zomato just laid off 600 employees.\n\nWhy? Because their AI system, Nugget, now handles 80% of customer queries, managing 15 million+ chats a month without human intervention. 😲\n\nBut here’s the twist.\n These weren't underperformers. In fact, they were part of Zomato's Associate Accelerator Program (ZAAP)—a program that trained 1,500 freshers for customer success roles. \nThey were earning ₹4.5 LPA. And now? Replaced by software.\n\nAI didn’t just take over… it optimized the system.\n Nugget slashes costs, improves speed, and enhances accuracy. It doesn’t just replace employees—it makes the whole process leaner, faster, and cheaper.\n\nZomato’s move is a glimpse into the future of the workforce.\n\n Customer success roles are just the beginning. Tomorrow? Software engineers, marketers, analysts, even operations roles could follow.\n Not because the jobs disappear, but because AI will only need 20% of the workforce it once did.\n\nThis isn’t just about cost-cutting.\n\n It’s about survival.\n\nCompanies will shrink, but they’ll be more efficient, agile, and competitive.\n\nThe question now is—Would you trust AI to manage your job? Or your future?\n\nExample 3:\nMukesh Ambani’s daughter is using AI to disrupt the fashion industry in India. Here’s how\n\nFor years, global giants like Zara and H&M have dominated premium fashion in India. Billions in revenue, billions in data…\n\nbut they still don’t really know what Indians want.\n\nEnter Azorte — the game-changing fashion brand spearheaded by Isha Ambani, Mukesh Ambani’s daughter. \n\nAnd it’s not just another retail store.\n\nWhat if I told you that shopping at Azorte feels more like stepping into the future?\n\nHere’s what’s happening inside these stores:\nAI-powered trial rooms: No more awkwardly shouting for a different size.\nRequest it with a button and it’ll be brought to you.\n\nFashion Discovery Stations: These stations scan your body type and recommend perfect fits, all powered by AI.\n\nZero checkout lines: Shop, scan, and pay with your phone. No waiting in queues.\n\nBut here’s the kicker: Azorte isn’t just selling clothes. It’s collecting massive amounts of data on YOU.\n\nWhile Zara and H&M are guessing what Indians want, Azorte knows exactly what you like, what size you need, and how much you’re willing to pay. \n\nAll thanks to cutting-edge tech.\n\nAlready launched in Gurugram after successful openings in Mumbai and Pune, Azorte’s strategy is simple:\n\nBring international styles.\n\nMix it with Indian preferences.\n\nOffer it at prices lower than H&M and Zara.\n\nWhat looks like a fashion store? It’s actually Ambani’s calculated move to dominate the $100 billion Indian fashion market. \n\nA move that foreign competitors can’t match — because they don’t have the tech to do it.\n\nSo, have you visited Azorte yet?\n\n Would you choose a local, tech-powered brand over international giants like Zara or H&M?\n\nDrop your thoughts below\n\nFollow for more insights on how India’s billionaires are reshaping industries with cutting-edge tech.\n\nExample 4:\nHave you ever wondered why super rich people buy expensive paintings?\n\nThe real reason would shock you!\nIt's how they multiply 5 crore rupees into 15 crore rupees overnight and that too legally.\nSounds impossible?\n\nLet me give you a hint : It's the same reason why rich people buy expensive paintings.\n\nHere is how it works in 3 steps:\n\nStep one. They buy an artwork for 5 crore rupees at a luxury auction house.\n\nStep two. They activate their secret network of art galleries, critics, and publications to create massive hype around the painting.\n\nNow here's where it gets crazy. The same painting suddenly becomes worth 50 crore rupees.\nBut wait. The real genius move? They donate it.\nLet me break down the math for you.\n\nWith a tax rate of 30 percent, donating a painting worth 50 crore rupees saves them 15 crore rupees in taxes.\nLet that sink in for a moment.\nThey only spent 5 crore rupees on the painting. \nBut they saved 15 crore rupees in taxes. That's a pure profit of 10 crore rupees, completely legal.\n\nThis is exactly why ultra rich people are so obsessed with art. It was never about the paintings. It's about the money hack that works every single time.\n\nThe one percent have been using this strategy for decades, and now you know why. Every time you see an ultra rich person donating art to a museum, you'll know what's really happening behind the scenes.\n\nSave this before it gets taken down. And follow for more wealth secrets they don't teach in school.\n\n\nJust train yourself how this post are written \nThings to note:\n1. Use First three lines of the post to drive the attention\n2. There are three part in post - The Hook (Make people click on see more), The Story (Which keeps the user engaged), CTA (End with CTA to make reader take action)\n3. Don't use \"*\" in the response\n\n\nQuick Tips:\n1. Avoid bulky long paragraphs\n2. Break the post into small lines\n3. Make it readable and mobile optimized\n4. Keep it short and simple\n5. Use 3-4 hashtags\n6. Be authentic\n\n\nYour task is to convert \n```content\n{{ $json.content }}\n```\n\nThis content into Linkedin Post",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -1280,
+        -510
+      ],
+      "id": "7adf79dd-6222-4df7-b997-dfa441447fd1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1280,
+        -280
+      ],
+      "id": "ac6100a1-0274-424a-a9ad-b8c2f0cb8b48",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "69W0MY1rH5ycGoOb",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"output\": {\n\t\t\t\"type\": \"string\"\n\t\t}\n\t}\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -1100,
+        -280
+      ],
+      "id": "1119f730-33d1-4a7a-832c-8e27119ab28d",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst updatedItems = items.map((item) => {\n  item.json.output = item.json.output.replaceAll(\"**\", \"\");\n  return item;\n});\nreturn updatedItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -900,
+        -500
+      ],
+      "id": "1f9dcd6c-4d1b-4456-80fc-b710f3f2c32f",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "content": "## Perplexity Search\n",
+        "height": 280,
+        "width": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1800,
+        -505
+      ],
+      "id": "f6f1dd04-6ce8-40f5-879a-9eac17134eaa",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "message": "=Does this Linkedin Post looks good?\n\n{{ $json.output }}",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Decision",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "accept"
+                  },
+                  {
+                    "option": "decline"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Feedback",
+              "placeholder": "Write your feedback"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -680,
+        -500
+      ],
+      "id": "695a0c5d-367e-4f43-813c-69651b11e97a",
+      "name": "Telegram",
+      "webhookId": "088860e5-cb2e-42df-b8fc-bc12ce58debd",
+      "credentials": {
+        "telegramApi": {
+          "id": "QRh7D3z5ltNE3Kxj",
+          "name": "Linkedin Post Bot Cred"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"sonar-pro\",\n  \"messages\": [\n    {\n  \"role\": \"system\",\n  \"content\": \"You are a helpful AI assistant that provides the latest news about artificial intelligence. Focus on significant developments, research breakthroughs, new product launches, and industry updates from the last week.Only include relevant articles from the past week. Ensure the titles and content are clear, concise, and informative.\"\n},\n    {\n      \"role\": \"user\",\n      \"content\": \"What are the latest AI news and developments from today {{$now}} till last week? Please provide a summary of 2-3 key stories with brief descriptions and sources.\"\n    }\n  ],\n  \"options\": {\n    \"search_queries\": [\"latest artificial intelligence news\", \"AI developments today\", \"new AI research papers\", \"AI technology updates\"]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1720,
+        -380
+      ],
+      "id": "75d5f804-f52d-4e15-829d-123e64f00821",
+      "name": "Perplexity Search",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "eWCvaYA434K9ehGM",
+          "name": "Perplexity API header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9de20167-56d2-4707-8252-4456e7cf7280",
+              "leftValue": "={{ $json.data.Decision }}",
+              "rightValue": "accept",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -460,
+        -500
+      ],
+      "id": "aa4109eb-2387-45d5-8bd6-83e6f5f88353",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "## Revision Perplexity Search",
+        "height": 280,
+        "width": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -380
+      ],
+      "id": "0e0035fe-0d09-4e57-be96-783d61577449",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"sonar-pro\",\n  \"messages\": [\n    {\n  \"role\": \"system\",\n  \"content\": \"You are a helpful AI assistant that provides the latest news about artificial intelligence. Focus on significant developments, research breakthroughs, new product launches, and industry updates from the last week.Only include relevant articles from the past week. Ensure the titles and content are clear, concise, and informative. You will get the feedback from user regarding what is wrong in earlier news which were generated so you have to keep that feedback in mind and then search for news\"\n},\n    {\n      \"role\": \"user\",\n      \"content\": \"What are the latest AI news and developments from today  {{ $now }} till last week? Please provide a summary of 2-3 key stories with brief descriptions and sources. Also here is some feedback by '{{ $('Telegram').item.json.data.Feedback }}'\"\n    }\n  ],\n  \"options\": {\n    \"search_queries\": [\"latest artificial intelligence news\", \"AI developments today\", \"new AI research papers\", \"AI technology updates\"]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        -280
+      ],
+      "id": "e764703a-daba-4adc-ad08-ce509beaf625",
+      "name": "Revision Perplexity Search",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "eWCvaYA434K9ehGM",
+          "name": "Perplexity API header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "45335d38-15b8-48f0-9fbf-a088c41903e3",
+              "name": "content",
+              "value": "={{ $json.choices[0].message.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1480,
+        -420
+      ],
+      "id": "383284fb-a238-4885-b539-9f872cf38fa1",
+      "name": "Revision Content Field"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1940,
+        -380
+      ],
+      "id": "0d66edad-2514-4a34-8b08-38523fbfcb88",
+      "name": "Telegram Trigger",
+      "webhookId": "3425c993-085c-49bf-bef1-7e9838684d36",
+      "credentials": {
+        "telegramApi": {
+          "id": "QRh7D3z5ltNE3Kxj",
+          "name": "Linkedin Post Bot Cred"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.linkedin.com/v2/userinfo",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer AQUCKDWan0nj-P7dmpSA71tmqhsTjoAwEUypkoyOeIaRwbTUi1X3OUsrOT3r7rjHOnPpLYCIyAUfltc_m_168yzAM_uzmQoERjw7BB0q6l28SH_Cs8puRiK7EsI65nd3R9fZs3tb64CRhOjKhLxNOs8UQ9IVuIwK_8H_ub30Q-OalFQygGBHZDCx-ZuZLNMPNNHvxP8qhJ1bOJnu2hIPX6ZI7ACMR5SIXQuvZefS-hSs1j8deW3hBfuDJNm3bSqwVch1r3w-cHK62qvLVJBUkY7SpYFfHzUOYuAlc2Y5s34Mwps8ZERq8qV8WdH9YenB8XGBZ00RattyPVNg59iXyVBiDF1D3g"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -200,
+        -580
+      ],
+      "id": "b0af1fdc-4759-4e7b-b9d4-73eb2f863e5d",
+      "name": "Linkedin User ID"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.linkedin.com/v2/ugcPosts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer AQUCKDWan0nj-P7dmpSA71tmqhsTjoAwEUypkoyOeIaRwbTUi1X3OUsrOT3r7rjHOnPpLYCIyAUfltc_m_168yzAM_uzmQoERjw7BB0q6l28SH_Cs8puRiK7EsI65nd3R9fZs3tb64CRhOjKhLxNOs8UQ9IVuIwK_8H_ub30Q-OalFQygGBHZDCx-ZuZLNMPNNHvxP8qhJ1bOJnu2hIPX6ZI7ACMR5SIXQuvZefS-hSs1j8deW3hBfuDJNm3bSqwVch1r3w-cHK62qvLVJBUkY7SpYFfHzUOYuAlc2Y5s34Mwps8ZERq8qV8WdH9YenB8XGBZ00RattyPVNg59iXyVBiDF1D3g"
+            },
+            {
+              "name": "Cookie",
+              "value": "lidc=\"b=VB33:s=V:r=V:a=V:p=V:g=6078:u=1498:x=1:i=1743855669:t=1743878106:v=2:sig=AQHN0JR4ha-_uigDnzeXvCLkQCisOh8T\"; bcookie=\"v=2&adeff45f-bee6-43bf-8950-861c4a32e883\""
+            },
+            {
+              "name": "cookie",
+              "value": "lidc=\"b=VB33:s=V:r=V:a=V:p=V:g=6078:u=1498:x=1:i=1743855669:t=1743878106:v=2:sig=AQHN0JR4ha-_uigDnzeXvCLkQCisOh8T\";bcookie=\"v=2&adeff45f-bee6-43bf-8950-861c4a32e883\";"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"author\": \"urn:li:person:ofdhoDV5Bw\",\n    \"lifecycleState\": \"PUBLISHED\",\n    \"specificContent\": {\n        \"com.linkedin.ugc.ShareContent\": {\n            \"shareCommentary\": {\n                \"text\": \"{{ $('Code').item.json.output.post }}\"\n            },\n            \"shareMediaCategory\": \"NONE\"   \n        }\n    },\n    \"visibility\": {\n        \"com.linkedin.ugc.MemberNetworkVisibility\": \"PUBLIC\"\n    }\n} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        -580
+      ],
+      "id": "b946bb0e-ed18-4fe8-9124-3898dda86799",
+      "name": "Linkedin Feed Post"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perplexity Search": {
+      "main": [
+        [
+          {
+            "node": "Revision Content Field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Linkedin User ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Revision Perplexity Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revision Perplexity Search": {
+      "main": [
+        [
+          {
+            "node": "Revision Content Field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revision Content Field": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Perplexity Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Linkedin User ID": {
+      "main": [
+        [
+          {
+            "node": "Linkedin Feed Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9ac2c45d-18b1-4b30-8629-6760ea472242",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "353ac65d120d2007b8a1503e85a96651a9b2cbb94b0334693ebac2129fa6a7ee"
+  },
+  "id": "2W4g1E8066dDvmtP",
+  "tags": []
+}
